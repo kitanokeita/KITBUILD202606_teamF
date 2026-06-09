@@ -1,5 +1,5 @@
 {
-  "name": "prototype",
+  "name": "kitbuild202606-teamf",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,12 +11,6 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
-    "sqlite3": "^6.0.1"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "eslint": "^10.4.1",
-    "typescript": "^6.0.3"
+    "morgan": "~1.9.1"
   }
 }
