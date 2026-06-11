@@ -7,7 +7,7 @@ const db = new sqlite3.Database('../siriai.db');
 
 /* GET 知り合い登録画面を表示 */
 router.get('/new', function (req, res, next) {
-  res.render('siriai/new',{ title: '知り合い登録ページ', name: '', hobby: '', MBTI: '' });
+  res.render('siriai/new',{ title: '知り合い登録ページ', name: '', age: '', hobby: '', MBTI: '' });
 });
 
 
@@ -27,6 +27,7 @@ router.post('/new', function (req, res, next) {
         title: "知り合いフォーム",
         content: "新しい知り合いを入力してください",
         name: "名前",
+        age: "年齢",
         hobby: "趣味",
         MBTI: "性格",
         contents: rows
