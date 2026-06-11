@@ -2,15 +2,72 @@
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
 </head>
+
 <body>
-    <h1><%= title %></h1>
-    <form >
-        <button>完成</button>
-    </form>
+    <h1>
+        <%= title %>
+    </h1>
+    <div class="showButton">
+        <input id="hair-button" type="button" value="髪型">
+        <input id="eyes-button" type="button" value="目">
+        <input id="mouth-button" type="button" value="口">
+    </div>
+
+    <div class="partsBox">
+        <div id="partsHair">
+            <label><input type="radio" name="hair" value="1">髪型1</label>
+            <label><input type="radio" name="hair" value="2">髪型2</label>
+            <label><input type="radio" name="hair" value="3">髪型3</label>
+            <label><input type="radio" name="hair" value="4">髪型4</label>
+            <label><input type="radio" name="hair" value="5">髪型5</label>
+        </div>
+        <div id="partsEyes" style="display:none">
+            <label><input type="radio" name="eyes" value="1">目1</label>
+            <label><input type="radio" name="eyes" value="2">目2</label>
+            <label><input type="radio" name="eyes" value="3">目3</label>
+            <label><input type="radio" name="eyes" value="4">目4</label>
+            <label><input type="radio" name="eyes" value="5">目5</label>
+        </div>
+        <div id="partsMouth" style="display:none">
+            <label><input type="radio" name="mouth" value="1">口1</label>
+            <label><input type="radio" name="mouth" value="2">口2</label>
+            <label><input type="radio" name="mouth" value="3">口3</label>
+            <label><input type="radio" name="mouth" value="4">口4</label>
+            <label><input type="radio" name="mouth" value="5">口5</label>
+        </div>
+    </div>
+
+    
+    <button type="submit">Mii完成</button>
+
+    <script>
+        // 引数にパーツ一覧のidが入り、それを表示させる関数
+        function showParts(part) {
+            document.getElementById('partsHair').style.display = 'none';
+            document.getElementById('partsEyes').style.display = 'none';
+            document.getElementById('partsMouth').style.display = 'none';
+            document.getElementById(part).style.display = 'block';
+        }
+
+        // hair-bottonを押したら、partsHair（髪型パーツ一覧）を表示する
+        document.getElementById('hair-button').addEventListener('click', function () {
+            showParts('partsHair');
+        });
+        document.getElementById('eyes-button').addEventListener('click', function () {
+            showParts('partsEyes');
+        });
+        document.getElementById('mouth-button').addEventListener('click', function () {
+            showParts('partsMouth');
+        });
+    </script>
 </body>
+
 </html>

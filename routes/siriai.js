@@ -1,9 +1,40 @@
 var express = require('express');
 var router = express.Router();
 
+//DBの読み込み
+var sqlite3 = require('sqlite3');
+const db = new sqlite3.Database('../siriai.db');
+
 /* GET 知り合い登録画面を表示 */
 router.get('/new', function (req, res, next) {
-  res.render('siriai/new', { title: '知り合い一覧ページ' });
+  res.render('siriai/new',{ title: '知り合い登録ページ', name: '', hobby: '', MBTI: '' });
+});
+
+
+/* GET 知り合い登録し、フロントに表示 */
+router.post('/new', function (req, res, next) {
+  const sql = 'SELECT * FROM siriai'
+  //データベースだけの操作だけでなくそのデータを持ってくるために必要SELECTなど
+  db.serialize(() => {
+    db.all(sql, (err, rows) => {
+
+      if (err) {
+        console.error("データベースにエラー:", err.message);
+        return res.status(500).send('データベースにエラーが発生！！:' + err.message);
+      }
+      //constは変数の箱
+      const data = {
+        title: "知り合いフォーム",
+        content: "新しい知り合いを入力してください",
+        name: "名前",
+        hobby: "趣味",
+        MBTI: "性格",
+        contents: rows
+      }
+      //form/add.ejsにdataを送る
+      res.render('siriai/new', data);
+    });
+  });
 });
 
 /* GET 知り合い一覧を表示 */
@@ -11,7 +42,7 @@ router.get('/itiran', function (req, res, next) {
   res.render('siriai/itiran', { title: '知り合い一覧ページ' });
 });
 
-/* GET 知り合い一覧を表示 */
+/* GET mii作成ページを表示 */
 router.get('/new/mii', function (req, res, next) {
   res.render('siriai/mii', { title: 'Mii作成ページ' });
 });
