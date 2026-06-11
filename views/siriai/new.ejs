@@ -21,12 +21,33 @@
     <form action="/siriai/new" method="post">
         <!-- valueは最初に書かれてる文字 "の中に変数" -->
         <h3>名前: <input type="text" name="name" value="<%= name %>" required></h3>
+        <h3>年齢: <input type="number" name="age" value="<%= age %>"></h3>
         <h3>趣味: <input type="text" name="hobby" value="<%= hobby %>"></h3>
-        <h3>性格: <input type="text" name="MBTI" value="<%= MBTI %>"></h3>
-        <button type="submit">OK</button>
+        <h3>性格(MBTI): <input type="text" name="MBTI" value="<%= MBTI %>"></h3>
     </form>
 
-    <a href="/siriai/new/mii">Mii作成する</a>
+    <button id="next-button">Mii作成する</button>
+
+    <script>
+        document.getElementById('next-button').addEventListener('click', function () {
+            // フォームから値を取得
+            const userName = document.querySelector('input[name="name"]').value;
+            const age = document.querySelector('input[name="age"]').value;
+            const hobby = document.querySelector('input[name="hobby"]').value;
+            const MBTI = document.querySelector('input[name="MBTI"]').value;
+
+            sessionStorage.setItem('name', userName);
+            sessionStorage.setItem('age', age);
+            sessionStorage.setItem('hobby', hobby);
+            sessionStorage.setItem('MBTI', MBTI);
+
+            console.log(userName);
+            console.log(age);
+            console.log(hobby);
+            console.log(MBTI);
+            window.location.href = '/siriai/new/mii';
+        })
+    </script>
 </body>
 
 </html>
