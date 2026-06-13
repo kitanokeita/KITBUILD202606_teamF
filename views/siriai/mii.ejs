@@ -6,12 +6,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="../../public/stylesheets/style.css"> -->
     <title>
         <%= title %>
     </title>
 </head>
 
 <body>
+    <style>
+        /* ejsにcss読み込むのめんどくさそうだったので、直接書きました。 */
+
+        body {
+            background: #ffe2b8;
+        }
+
+        .partsBox {
+            display: flex;
+            justify-content: center;
+        }
+
+        .partsImg {
+            background-color: #fff;
+            width: 115px;
+            height: 115px;
+        }
+
+        .previewBox {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .previewImg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+        }
+
+        /* ラジオボタンの○を消す */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* 画像の周りに隙間をあける */
+        label img {
+            margin: 3px;
+            padding: 5px;
+        }
+
+        /* 未選択の場合、色を薄くする */
+        input[type="radio"]+label img {
+            opacity: 0.2;
+        }
+
+        /* 選択済みの場合、色を濃くする */
+        input[type="radio"]:checked+label img {
+            opacity: 1;
+        }
+    </style>
+
     <h1>
         <%= title %>
     </h1>
@@ -23,29 +81,101 @@
 
     <div class="partsBox">
         <div id="partsHair">
-            <label><input type="radio" name="hair" value="1">髪型1</label>
-            <label><input type="radio" name="hair" value="2">髪型2</label>
-            <label><input type="radio" name="hair" value="3">髪型3</label>
-            <label><input type="radio" name="hair" value="4">髪型4</label>
-            <label><input type="radio" name="hair" value="5">髪型5</label>
+            <!-- 髪型１ -->
+            <input id=hair1 type="radio" name="hair" value="1">
+            <label for="hair1"><img class="partsImg" src="/img/hair1.png" alt=""></label>
+
+            <!-- 髪型２ -->
+            <input id=hair2 type="radio" name="hair" value="2">
+            <label for="hair2"><img class="partsImg" src="/img/hair2.png" alt=""></label>
+
+            <!-- 髪型３ -->
+            <input id=hair3 type="radio" name="hair" value="3">
+            <label for="hair3"><img class="partsImg" src="/img/hair3.png" alt=""></label>
+
+            <!-- 髪型４ -->
+            <input id=hair4 type="radio" name="hair" value="4">
+            <label for="hair4"><img class="partsImg" src="/img/hair4.png" alt=""></label>
+
+            <!-- 髪型５ -->
+            <input id=hair5 type="radio" name="hair" value="5">
+            <label for="hair5"><img class="partsImg" src="/img/hair5.png" alt=""></label>
         </div>
+
         <div id="partsEyes" style="display:none">
-            <label><input type="radio" name="eyes" value="1">目1</label>
-            <label><input type="radio" name="eyes" value="2">目2</label>
-            <label><input type="radio" name="eyes" value="3">目3</label>
-            <label><input type="radio" name="eyes" value="4">目4</label>
-            <label><input type="radio" name="eyes" value="5">目5</label>
+
+            <!-- 目１ -->
+            <input id=eyes1 type="radio" name="eyes" value="1">
+            <label for="eyes1"><img class="partsImg" src="/img/eyes1.png" alt=""></label>
+
+            <!-- 目２ -->
+            <input id=eyes2 type="radio" name="eyes" value="2">
+            <label for="eyes2"><img class="partsImg" src="/img/eyes2.png" alt=""></label>
+
+            <!-- 目３ -->
+            <input id=eyes3 type="radio" name="eyes" value="3">
+            <label for="eyes3"><img class="partsImg" src="/img/eyes3.png" alt=""></label>
+
+            <!-- 目４ -->
+            <input id=eyes4 type="radio" name="eyes" value="4">
+            <label for="eyes4"><img class="partsImg" src="/img/eyes4.png" alt=""></label>
+
+            <!-- 目５ -->
+            <input id=eyes5 type="radio" name="eyes" value="5">
+            <label for="eyes5"><img class="partsImg" src="/img/eyes5.png" alt=""></label>
         </div>
+
         <div id="partsMouth" style="display:none">
-            <label><input type="radio" name="mouth" value="1">口1</label>
-            <label><input type="radio" name="mouth" value="2">口2</label>
-            <label><input type="radio" name="mouth" value="3">口3</label>
-            <label><input type="radio" name="mouth" value="4">口4</label>
-            <label><input type="radio" name="mouth" value="5">口5</label>
+
+            <!-- 口１ -->
+            <input id=mouth1 type="radio" name="mouth" value="1">
+            <label for="mouth1"><img class="partsImg" src="/img/mouth1.png" alt=""></label>
+
+            <!-- 口２ -->
+            <input id=mouth2 type="radio" name="mouth" value="2">
+            <label for="mouth2"><img class="partsImg" src="/img/mouth2.png" alt=""></label>
+
+            <!-- 口３ -->
+            <input id=mouth3 type="radio" name="mouth" value="3">
+            <label for="mouth3"><img class="partsImg" src="/img/mouth3.png" alt=""></label>
+
+            <!-- 口４ -->
+            <input id=mouth4 type="radio" name="mouth" value="4">
+            <label for="mouth4"><img class="partsImg" src="/img/mouth4.png" alt=""></label>
+
+            <!-- 口５ -->
+            <input id=mouth5 type="radio" name="mouth" value="5">
+            <label for="mouth5"><img class="partsImg" src="/img/mouth5.png" alt=""></label>
         </div>
     </div>
 
-    
+    <div class="previewBox">
+
+        <!-- 背景 -->
+        <img class="previewImg" src="/img/bg.png" alt="" width="400px" height="400px">
+
+        <!-- 全ての画像を背景の上に置いておいて、hairのradioの値が変わったときに表示する -->
+        <img id="previewHair" src="/img/hair1.png" alt="" class="previewImg" style="display:none">
+        <img id="previewHair" src="/img/hair2.png" alt="" class="previewImg" style="display:none">
+        <img id="previewHair" src="/img/hair3.png" alt="" class="previewImg" style="display:none">
+        <img id="previewHair" src="/img/hair4.png" alt="" class="previewImg" style="display:none">
+        <img id="previewHair" src="/img/hair5.png" alt="" class="previewImg" style="display:none">
+
+        <img id="previewEyes" src="/img/eyes1.png" alt="" class="previewImg" style="display:none">
+        <img id="previewEyes" src="/img/eyes2.png" alt="" class="previewImg" style="display:none">
+        <img id="previewEyes" src="/img/eyes3.png" alt="" class="previewImg" style="display:none">
+        <img id="previewEyes" src="/img/eyes4.png" alt="" class="previewImg" style="display:none">
+        <img id="previewEyes" src="/img/eyes5.png" alt="" class="previewImg" style="display:none">
+
+        <img id="previewMouth" src="/img/mouth1.png" alt="" class="previewImg" style="display:none">
+        <img id="previewMouth" src="/img/mouth2.png" alt="" class="previewImg" style="display:none">
+        <img id="previewMouth" src="/img/mouth3.png" alt="" class="previewImg" style="display:none">
+        <img id="previewMouth" src="/img/mouth4.png" alt="" class="previewImg" style="display:none">
+        <img id="previewMouth" src="/img/mouth5.png" alt="" class="previewImg" style="display:none">
+
+    </div>
+
+
     <button type="submit">Mii完成</button>
 
     <script>
@@ -67,6 +197,31 @@
         document.getElementById('mouth-button').addEventListener('click', function () {
             showParts('partsMouth');
         });
+
+
+        // 選択しているhairのradioの値が変わったときに発火。
+        document.querySelectorAll('input[name="hair"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const img = document.getElementById('previewHair');
+                img.src = '/img/hair' + this.value + '.png';
+                img.style.display = 'block';
+            });
+        });
+        document.querySelectorAll('input[name="eyes"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const img = document.getElementById('previewEyes');
+                img.src = '/img/eyes' + this.value + '.png';
+                img.style.display = 'block';
+            });
+        });
+        document.querySelectorAll('input[name="mouth"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const img = document.getElementById('previewMouth');
+                img.src = '/img/mouth' + this.value + '.png';
+                img.style.display = 'block';
+            });
+        });
+
     </script>
 </body>
 
