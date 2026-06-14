@@ -5,14 +5,48 @@ var router = express.Router();
 var sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../siriai.db');
 
-/* GET 知り合い登録画面を表示 */
+/* 
+ *GET 
+ *:3000/sirial/new
+ * new.ejs 知り合いの登録画面
+ * すべての変数は記入欄の初期値
+ * name 名前
+ * age 年齢
+ * hobby 趣味
+ * MBTI　mbti
+ * /siriai/newにrender
+*/
 router.get('/new', function (req, res, next) {
-  res.render('siriai/new',{ title: '知り合い登録ページ', name: '', age: '', hobby: '', MBTI: '' });
+  const data = {
+    title: "知り合い登録",
+    name: "名前",
+    age: "19",
+    hobby: "趣味",
+    MBTI: "mbti"
+  }
+  res.render('siriai/new', data);
 });
 
-
-/* GET 知り合い登録し、フロントに表示 */
+/*
+ * CREATE TABLE "siriai" (
+    "id" INTEGER NOT NULL,
+    "name" TEXT NOT NULL,
+    "age" INTEGER,
+    "MBTI" TEXT,
+    "hobby" TEXT NOT NULL,
+    "hair" INTEGER NOT NULL,
+    "eyes" INTEGER NOT NULL,
+    "mouth" INTEGER NOT NULL,
+    PRIMARY KEY("id" AUTOINCREMENT)
+  );
+ */
+/* POST
+ *:3000/siriai/new
+ * /siriai/new/miiにredirect
+*/
 router.post('/new', function (req, res, next) {
+  /*
+  //siriai.dbからデータを持ってくる
   const sql = 'SELECT * FROM siriai'
   //データベースだけの操作だけでなくそのデータを持ってくるために必要SELECTなど
   db.serialize(() => {
@@ -32,11 +66,20 @@ router.post('/new', function (req, res, next) {
         MBTI: "性格",
         contents: rows
       }
+        */
+
       //form/add.ejsにdataを送る
-      res.render('siriai/new', data);
+      const data = {
+        title: "Mii作成ページ",
+        name: req.body["name"],
+        age: req.body["age"],
+        hobby: req.body["hobby"],
+        MBTI: req.body["MBTI"]
+      }
+      res.render("siriai/mii" , data);
     });
-  });
-});
+ // });
+//});
 
 /* GET 知り合い一覧を表示 */
 router.get('/itiran', function (req, res, next) {
@@ -53,7 +96,15 @@ router.get('/new/mii', function (req, res, next) {
 
 
 
-
+/**
+ * const eye_parts_id = （何かしらでパーツIDを取ってこれる）
+if ( eye_parts_id == 1)
+　　1パターン目の目の画像をinput 
+画像を連番にしておくと、"eye_parts" + eye_parts_id + ".png"
+名刺を表示するエンドポイントでは、SELECT文等で、DBから持ってこれる 
+getエンドポイント→どの友達の名刺を表示したいのかがわかる（ここで友達IDがわかる）
+友達IDをもとに、その友達自体のデータ（名前 / パーツごとのパーツID) 
+ */
 // /* GET 知り合い一覧をDBから取得して表示 */
 // router.get('/', function (req, res, next) {
 //   db.all('SELECT * FROM people', [], function (err, rows) {
