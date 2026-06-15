@@ -22,10 +22,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//indexRouterのページ
+/*
+ * views/index.ejs 
+ */
 app.use('/', indexRouter);
+
+/*
+ * views/error.ejs 
+ */
 app.use('/users', usersRouter);
 
 //追加した
+/*
+ * views/siriai/*.ejs
+ */
 app.use('/siriai', siriaiRouter);
 
 // catch 404 and forward to error handler

@@ -1,4 +1,13 @@
-//登録ページ（名前・趣味・性格）
+<!-- 登録ページ（名前・趣味・性格） -->
+
+<!-- 
+　このページに使われている変数
+    title
+    name
+    age
+    hobby
+    MBTI
+-->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -15,19 +24,28 @@
     <h1>
         <%= title %>
     </h1>
-    <p>
-        <a href="../index">戻る</a>
-    </p>
+
+    <% if (errorMessage) {%>
+        <p style= "color: red; font-weight: bold;"><%= errorMessage %></p>
+    <% } %>
+
+
+    <!-- POSTで/siriai/newに通信する -->
     <form action="/siriai/new" method="post">
         <!-- valueは最初に書かれてる文字 "の中に変数" -->
-        <h3>名前: <input type="text" name="name" value="<%= name %>" required></h3>
+        <h3>名前: <input type="text" name="name" value="<%= name %>"></h3>
         <h3>年齢: <input type="number" name="age" value="<%= age %>"></h3>
         <h3>趣味: <input type="text" name="hobby" value="<%= hobby %>"></h3>
-        <h3>性格(MBTI): <input type="text" name="MBTI" value="<%= MBTI %>"></h3>
+        <h3>性格(MBTI): <input type="text" name="MBTI" value="<%= MBTI %>"> <a href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a></h3> 
+        <button id="next-button">Mii作成する</button>
     </form>
+    <p>
+        <a href="../">戻る</a>
+    </p>
 
-    <button id="next-button">Mii作成する</button>
-
+    <!-- script文
+     Mii作成するボタンを押した時
+    
     <script>
         document.getElementById('next-button').addEventListener('click', function () {
             // フォームから値を取得
@@ -41,13 +59,13 @@
             sessionStorage.setItem('hobby', hobby);
             sessionStorage.setItem('MBTI', MBTI);
 
-            console.log(userName);
+            console.log("あいうえお");
             console.log(age);
             console.log(hobby);
             console.log(MBTI);
             window.location.href = '/siriai/new/mii';
         })
-    </script>
+    </script>　-->
 </body>
 
 </html>

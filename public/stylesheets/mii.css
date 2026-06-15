@@ -1,0 +1,31 @@
+body {
+    background: #ffe2b8;
+}
+
+.partsBox {
+    display: flex;
+    justify-content: center;
+}
+
+.partsImg {
+    background-color: #fff;
+    width: 115px;
+    height: 115px;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+label img {
+    margin: 3px;
+    padding: 5px;
+}
+
+input[type="radio"]+label img {
+    opacity: 0.2;
+}
+
+input[type="radio"]:checked+label img {
+    opacity: 1;
+}
