@@ -20,11 +20,11 @@ const db = new sqlite3.Database('siriai.db');
   );
  */
 
-  /*もし認証機能をつけるならUsersデータベース
-   * user_id (PK) siriaiデータベースの(FK)
-   * email nodemailerでメールを送れるようにしてみたい
-   * password　ハッシュする
-   */
+/*もし認証機能をつけるならUsersデータベース
+ * user_id (PK) siriaiデータベースの(FK)
+ * email nodemailerでメールを送れるようにしてみたい
+ * password　ハッシュする
+ */
 
 /* 
  *GET 
@@ -57,28 +57,28 @@ router.get('/new', function (req, res, next) {
  * /siriai/new/miiにredirect
 */
 router.post('/new', function (req, res, next) {
-      //form/add.ejsにdataを送る
-      const data = {
-        title: "Mii作成ページ",
-        name: req.body["name"],
-        age: req.body["age"],
-        MBTI: req.body["MBTI"],
-        hobby: req.body["hobby"],
-        errorMessage: ""
-      }
+  //form/add.ejsにdataを送る
+  const data = {
+    title: "Mii作成ページ",
+    name: req.body["name"],
+    age: req.body["age"],
+    MBTI: req.body["MBTI"],
+    hobby: req.body["hobby"],
+    errorMessage: ""
+  }
 
-      if(! data.name || ! data.MBTI|| !data.age||!data.hobby){
-        var errorplace = [];
-        if(! data.name) errorplace.push("名前");
-        if(! data.age) errorplace.push("年齢");
-        if(! data.hobby) errorplace.push("趣味");
-        if(! data.MBTI) errorplace.push("MBTI");
+  if (!data.name || !data.MBTI || !data.age || !data.hobby) {
+    var errorplace = [];
+    if (!data.name) errorplace.push("名前");
+    if (!data.age) errorplace.push("年齢");
+    if (!data.hobby) errorplace.push("趣味");
+    if (!data.MBTI) errorplace.push("MBTI");
 
-        data.errorMessage = `${errorplace.join(",")}`+ "が未入力ですよ！！すべて入力してね。";
-        return res.render("siriai/new" , data)
-      }
-      res.render("siriai/mii" , data);
-    });
+    data.errorMessage = `${errorplace.join(",")}` + "が未入力ですよ！！すべて入力してね。";
+    return res.render("siriai/new", data)
+  }
+  res.render("siriai/mii", data);
+});
 
 /* GET 知り合い一覧を表示 */
 /**GET /siriai/itiran
@@ -97,7 +97,7 @@ router.get('/itiran', function (req, res, next) {
 /**
  * /siriai/に間違えて送ってしまった時の対処
  */
-router.get('/' , function(req  , res , next) {
+router.get('/', function (req, res, next) {
   res.redirect('/');
 });
 
@@ -117,14 +117,14 @@ router.post('/mii', function (req, res, next) {
   const sql = "INSERT INTO siriai (name , age , MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?)";
   const data = [
     req.body.name,
-    req.body.age, 
+    req.body.age,
     req.body.MBTI,
     req.body.hobby,
     req.body.hair,
     req.body.eyes,
     req.body.mouth
   ];
-  db.run(sql,data, function (err) {
+  db.run(sql, data, function (err) {
     if (err) {
       console.error(err);
       return res.status(500).send('データベースエラー');
@@ -145,7 +145,7 @@ router.get('/delete', function (req, res, next) {
       console.error(err);
       return res.status(500).send('データベースエラー');
     }
-    
+
     res.redirect('/siriai/itiran');
   });
 });
@@ -154,35 +154,37 @@ router.get('/delete', function (req, res, next) {
 //編集画面が必要
 //?はプレースホルダ
 router.get('/edit', function (req, res, next) {
-  // JavaScriptを埋め込んで、5秒カウントダウンしてから移動するHTML
-  const html = `
-      <h1>まだページを作ってないよ〜〜〜〜〜</h1>
-      
-      <p><span id="timer" class="countdown">5</span> 秒後に一覧ページに戻ります...</p>
-
-      <script>
-        // 残り秒数をセット
-        let timeLeft = 5;
-        // 数字を表示するHTMLの要素を取得
-        //5を取得
-        const timerElement = document.getElementById('timer');
-        
-        // setIntervalを使って、1000ミリ秒（1秒）ごとに中の処理を繰り返す
-        const countdown = setInterval(function() {
-          timeLeft--; // 1減らす
-          timerElement.textContent = timeLeft; // textContentに代入することで画面の数字を書き換える
-          
-          // 0秒になったら
-          if (timeLeft <= 0) {
-            clearInterval(countdown); // カウントダウンのタイマーを止める
-            window.location.href = '/siriai/itiran'; // window.location.hrefで一覧ページへ移動!
-          }
-        }, 1000)//1000ミリ秒;
-      </script>
-  `;
-  
-  res.status(404).send(html);
+  var id = req.query.id; //URLの ?id= の部分を取得
+  db.get('SELECT * FROM siriai WHERE id = ?', [id], function (err, row) {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('データベースエラー');
+    }
+    res.render('siriai/edit', {
+      title: '知り合い更新',
+      id: row.id,
+      name: row.name,
+      age: row.age,
+      hobby: row.hobby,
+      MBTI: row.MBTI,
+      errorMessage: ""
+    });
+  });
 });
+
+router.post('/edit', function (req, res, next) {
+  var id = req.body.id;
+  db.run('UPDATE siriai SET name=?, age=?, MBTI=?, hobby=? WHERE id=?',
+    [req.body.name, req.body.age, req.body.MBTI, req.body.hobby, id],
+    function (err) {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('データベースエラー');
+    }
+    res.redirect('/siriai/itiran');
+  });
+});
+
 module.exports = router;
 
 
@@ -191,11 +193,11 @@ module.exports = router;
 /**
  * const eye_parts_id = （何かしらでパーツIDを取ってこれる）
 if ( eye_parts_id == 1)
-　　1パターン目の目の画像をinput 
+  1パターン目の目の画像をinput
 画像を連番にしておくと、"eye_parts" + eye_parts_id + ".png"
-名刺を表示するエンドポイントでは、SELECT文等で、DBから持ってこれる 
+名刺を表示するエンドポイントでは、SELECT文等で、DBから持ってこれる
 getエンドポイント→どの友達の名刺を表示したいのかがわかる（ここで友達IDがわかる）
-友達IDをもとに、その友達自体のデータ（名前 / パーツごとのパーツID) 
+友達IDをもとに、その友達自体のデータ（名前 / パーツごとのパーツID)
  */
 // /* GET 知り合い一覧をDBから取得して表示 */
 // router.get('/', function (req, res, next) {
