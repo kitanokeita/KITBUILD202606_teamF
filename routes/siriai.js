@@ -133,6 +133,9 @@ router.post('/mii', function (req, res, next) {
   });
 });
 
+/**
+ * AI読み込み機能
+ */
 
 /* POST 指定したidの知り合いをDBから削除して一覧にリダイレクト */
 router.get('/delete', function (req, res, next) {
@@ -161,19 +164,20 @@ router.get('/edit', function (req, res, next) {
         // 残り秒数をセット
         let timeLeft = 5;
         // 数字を表示するHTMLの要素を取得
+        //5を取得
         const timerElement = document.getElementById('timer');
         
         // setIntervalを使って、1000ミリ秒（1秒）ごとに中の処理を繰り返す
         const countdown = setInterval(function() {
           timeLeft--; // 1減らす
-          timerElement.textContent = timeLeft; // 画面の数字を書き換える
+          timerElement.textContent = timeLeft; // textContentに代入することで画面の数字を書き換える
           
           // 0秒になったら
           if (timeLeft <= 0) {
             clearInterval(countdown); // カウントダウンのタイマーを止める
-            window.location.href = '/siriai/itiran'; // 一覧ページへ移動！
+            window.location.href = '/siriai/itiran'; // window.location.hrefで一覧ページへ移動!
           }
-        }, 1000);
+        }, 1000)//1000ミリ秒;
       </script>
   `;
   
