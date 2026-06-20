@@ -36,7 +36,30 @@
         <h3>名前: <input type="text" name="name" value="<%= name %>"></h3>
         <h3>年齢: <input type="number" name="age" value="<%= age %>"></h3>
         <h3>趣味: <input type="text" name="hobby" value="<%= hobby %>"></h3>
-        <h3>性格(MBTI): <input type="text" name="MBTI" value="<%= MBTI %>"> <a href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a></h3> 
+        <h3>性格(MBTI): 
+            <select name="MBTI">
+                <!-- サーバー側のMBTIの名前と一致する場合それを選択された状態にする -->
+                 <!-- 選択されたところのvalueが返される -->
+                <option value="" <%= MBTI === '' ? 'selected' : '' %>>選択してください</option>
+                <option value="INTJ" <%= MBTI === 'INTJ' ? 'selected' : '' %>>INTJ</option>
+                <option value="INTP" <%= MBTI === 'INTP' ? 'selected' : '' %>>INTP</option>
+                <option value="ENTJ" <%= MBTI === 'ENTJ' ? 'selected' : '' %>>ENTJ</option>
+                <option value="ENTP" <%= MBTI === 'ENTP' ? 'selected' : '' %>>ENTP</option>
+                <option value="INFJ" <%= MBTI === 'INFJ' ? 'selected' : '' %>>INFJ</option>
+                <option value="INFP" <%= MBTI === 'INFP' ? 'selected' : '' %>>INFP</option>
+                <option value="ENFJ" <%= MBTI === 'ENFJ' ? 'selected' : '' %>>ENFJ</option>
+                <option value="ENFP" <%= MBTI === 'ENFP' ? 'selected' : '' %>>ENFP</option>
+                <option value="ISTJ" <%= MBTI === 'ISTJ' ? 'selected' : '' %>>ISTJ</option>
+                <option value="ISFJ" <%= MBTI === 'ISFJ' ? 'selected' : '' %>>ISFJ</option>
+                <option value="ESTJ" <%= MBTI === 'ESTJ' ? 'selected' : '' %>>ESTJ</option>
+                <option value="ESFJ" <%= MBTI === 'ESFJ' ? 'selected' : '' %>>ESFJ</option>
+                <option value="ISTP" <%= MBTI === 'ISTP' ? 'selected' : '' %>>ISTP</option>
+                <option value="ISFP" <%= MBTI === 'ISFP' ? 'selected' : '' %>>ISFP</option>
+                <option value="ESTP" <%= MBTI === 'ESTP' ? 'selected' : '' %>>ESTP</option>
+                <option value="ESFP" <%= MBTI === 'ESFP' ? 'selected' : '' %>>ESFP</option>
+            </select>
+            <a href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a>
+        </h3>
         <button id="next-button">Mii作成する</button>
     </form>
     <p>

@@ -133,6 +133,9 @@ router.post('/mii', function (req, res, next) {
   });
 });
 
+/**
+ * AI読み込み機能
+ */
 
 /* POST 指定したidの知り合いをDBから削除して一覧にリダイレクト */
 router.get('/delete', function (req, res, next) {
