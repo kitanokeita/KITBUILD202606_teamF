@@ -41,9 +41,9 @@ const db = new sqlite3.Database('siriai.db');
 router.get('/new', function (req, res, next) {
   const data = {
     title: "知り合い登録",
-    name: "名前",
-    age: "19",
-    hobby: "趣味",
+    name: "",
+    age: "",
+    hobby: "",
     MBTI: "mbti",
     errorMessage: ""
   }
@@ -136,6 +136,16 @@ router.post('/mii', function (req, res, next) {
 /**
  * AI読み込み機能
  */
+router.post('/ai', function (req, res, next) {
+  const data = {
+    title: "AIアバター作成",
+    name: req.body.name,
+    age: req.body.age,
+    MBTI: req.body.MBTI,
+    hobby: req.body.hobby,
+  };
+  res.render('siriai/ai', data);
+});
 
 /* POST 指定したidの知り合いをDBから削除して一覧にリダイレクト */
 router.get('/delete', function (req, res, next) {
