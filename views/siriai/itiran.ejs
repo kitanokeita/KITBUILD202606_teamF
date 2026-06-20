@@ -4,54 +4,57 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheets/avatar.css">
-    <link rel="stylesheet" href="/stylesheets/itiran.css">
-    <title>
-        <%= title %>
-    </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/avatar.css">
+  <link rel="stylesheet" href="/stylesheets/itiran.css">
+  <title>
+    <%= title %>
+  </title>
 </head>
 
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <div>
-      <table>
-        <tr>
-          <th>アバター</th>
-          <th>名前</th>
-          <th>年齢</th>
-          <th>趣味</th>
-          <th>MBTI</th>
-          <!-- colspan="2"は二列分 -->
-          <th colspan="2">操作</th> 
-        </tr>
+  <h1>
+    <%= title %>
+  </h1>
+  <div>
+    <table>
+      <tr>
+        <th>名前</th>
+        <th>年齢</th>
+        <th>趣味</th>
+        <th>MBTI</th>
+        <th>アバター</th>
+        <!-- colspan="2"は二列分 -->
+        <th colspan="2">操作</th>
+      </tr>
       <% for(var i in rows) { %>
         <tr>
-          <% var obj = rows[i]; %>
-          <td><%= obj.name %></td>
-          <td><%= obj.age %></td>
-          <td><%= obj.hobby %></td>
-          <td><%= obj.MBTI %></td>
-          <td>
-              <%- include('avatar', {
-                  boxSize: 'size-itiran',
-                  imgIdPrefix: 'list' + obj.id, 
-                  hair: obj.hair,
-                  eyes: obj.eyes,
-                  mouth: obj.mouth
-              }) %>
-          </td>
-          <td><a href="/siriai/edit?id=<%= obj.id %>">更新</a></td>
-          <td><a href="/siriai/delete?id=<%= obj.id %>">削除</a></td>
+          <% var obj=rows[i]; %>
+            <td>
+              <%= obj.name %>
+            </td>
+            <td>
+              <%= obj.age %>
+            </td>
+            <td>
+              <%= obj.hobby %>
+            </td>
+            <td>
+              <%= obj.MBTI %>
+            </td>
+            <td>
+              <%- include('avatar', { boxSize: 'size-itiran' , imgIdPrefix: 'list' + obj.id, hair: obj.hair, eyes:
+                obj.eyes, mouth: obj.mouth }) %>
+            </td>
+            <td><a href="/siriai/edit?id=<%= obj.id %>">更新</a></td>
+            <td><a href="/siriai/delete?id=<%= obj.id %>">削除</a></td>
         </tr>
-      <% } %>
-      </table>
-    </div>
-    <!-- views/index.ejsから/に変えた -->
-    <a href="/">戻る</a>
+        <% } %>
+    </table>
+  </div>
+  <!-- views/index.ejsから/に変えた -->
+  <a href="/">戻る</a>
 </body>
 
 </html>
