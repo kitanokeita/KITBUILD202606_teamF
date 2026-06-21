@@ -25,10 +25,10 @@
         <th>関係</th>
         <th>趣味</th>
         <th>MBTI</th>
-        <th>関係</th>
         <th>アバター</th>
         <!-- colspan="2"は二列分 -->
         <th colspan="2">操作</th>
+        <th>お気に入り</th>
       </tr>
       <% for(var i in rows) { %>
         <tr>
@@ -54,6 +54,11 @@
             </td>
             <td><a href="/siriai/edit?id=<%= obj.id %>">更新</a></td>
             <td><a href="/siriai/delete?id=<%= obj.id %>">削除</a></td>
+            <td>
+              <a href="/siriai/favorite?id=<%= obj.id %>">
+                <%= obj.favorite===1 ? "★" : "☆" %>
+              </a>
+            </td>
         </tr>
         <% } %>
     </table>

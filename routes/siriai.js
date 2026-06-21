@@ -90,7 +90,8 @@ router.post('/new', function (req, res, next) {
  * 
  */
 router.get('/itiran', function (req, res, next) {
-  db.all('SELECT * FROM siriai', [], function (err, rows) {
+  // favorite の降順にすることでお気に入り（1）が上に表示される
+  db.all('SELECT * FROM siriai ORDER BY favorite DESC', [], function (err, rows) {
     if (err) {
       console.error(err);
       return res.status(500).send('データベースエラー');
@@ -201,6 +202,27 @@ router.post('/edit', function (req, res, next) {
       }
       res.redirect('/siriai/itiran');
     });
+});
+
+/* GET お気に入りトグル
+ * /siriai/favorite?id=3
+ * クリックするたびに favorite を 0（なし）↔ 1（あり）で切り替える
+ * 切り替え後は一覧ページにリダイレクト
+ */
+router.get('/favorite', function (req, res, next) {
+  var id = req.query.id; // URLの ?id=
+
+  // 今のfavoriteの値をDBから取得
+  db.get('SELECT favorite FROM siriai WHERE id = ?', [id], function (err, row) {
+
+    // 今が1なら0、今が0なら1に反転（トグル）
+    var newFavorite = row.favorite === 1 ? 0 : 1;
+
+    // 反転した値でDBを更新
+    db.run('UPDATE siriai SET favorite = ? WHERE id = ?', [newFavorite, id], function (err) {
+      res.redirect('/siriai/itiran');
+    });
+  });
 });
 
 module.exports = router;
