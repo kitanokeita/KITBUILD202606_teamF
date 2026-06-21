@@ -11,6 +11,7 @@ const db = new sqlite3.Database('siriai.db');
     "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "age" INTEGER,
+    "relation"	TEXT,
     "MBTI" TEXT,
     "hobby" TEXT NOT NULL,
     "hair" INTEGER NOT NULL,
@@ -33,6 +34,7 @@ const db = new sqlite3.Database('siriai.db');
  * すべての変数は記入欄の初期値
  * name 名前
  * age 年齢
+ * relation 関係
  * hobby 趣味
  * MBTI　mbti
  * /siriai/newにrender
@@ -43,6 +45,7 @@ router.get('/new', function (req, res, next) {
     title: "知り合い登録",
     name: "",
     age: "",
+    relation: "",
     hobby: "",
     MBTI: "mbti",
     errorMessage: ""
@@ -62,15 +65,17 @@ router.post('/new', function (req, res, next) {
     title: "Mii作成ページ",
     name: req.body["name"],
     age: req.body["age"],
+    relation: req.body["relation"],
     MBTI: req.body["MBTI"],
     hobby: req.body["hobby"],
     errorMessage: ""
   }
 
-  if (!data.name || !data.MBTI || !data.age || !data.hobby) {
+  if (!data.name || !data.age || !data.relation || !data.hobby || !data.MBTI) {
     var errorplace = [];
     if (!data.name) errorplace.push("名前");
     if (!data.age) errorplace.push("年齢");
+    if (!data.age) errorplace.push("関係");
     if (!data.hobby) errorplace.push("趣味");
     if (!data.MBTI) errorplace.push("MBTI");
 
@@ -114,10 +119,11 @@ router.get('/', function (req, res, next) {
  */
 //"INSERT INTO siriai (name , age , MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?)"
 router.post('/mii', function (req, res, next) {
-  const sql = "INSERT INTO siriai (name , age , MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  const sql = "INSERT INTO siriai (name , age , relation, MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   const data = [
     req.body.name,
     req.body.age,
+    req.body.relation,
     req.body.MBTI,
     req.body.hobby,
     req.body.hair,
@@ -141,6 +147,7 @@ router.post('/ai', function (req, res, next) {
     title: "AIアバター作成",
     name: req.body.name,
     age: req.body.age,
+    age: req.body.relation,
     MBTI: req.body.MBTI,
     hobby: req.body.hobby,
   };
@@ -175,6 +182,7 @@ router.get('/edit', function (req, res, next) {
       id: row.id,
       name: row.name,
       age: row.age,
+      relation: row.relation,
       hobby: row.hobby,
       MBTI: row.MBTI,
       errorMessage: ""
@@ -185,14 +193,14 @@ router.get('/edit', function (req, res, next) {
 router.post('/edit', function (req, res, next) {
   var id = req.body.id;
   db.run('UPDATE siriai SET name=?, age=?, MBTI=?, hobby=? WHERE id=?',
-    [req.body.name, req.body.age, req.body.MBTI, req.body.hobby, id],
+    [req.body.name, req.body.age, req.body.relation, req.body.MBTI, req.body.hobby, id],
     function (err) {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('データベースエラー');
-    }
-    res.redirect('/siriai/itiran');
-  });
+      if (err) {
+        console.error(err);
+        return res.status(500).send('データベースエラー');
+      }
+      res.redirect('/siriai/itiran');
+    });
 });
 
 module.exports = router;
