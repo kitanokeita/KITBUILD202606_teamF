@@ -6,27 +6,6 @@ var router = express.Router();
 var sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('siriai.db');
 
-/*siriaiデータベース
- * CREATE TABLE "siriai" (
-    "id" INTEGER NOT NULL,
-    "name" TEXT NOT NULL,
-    "age" INTEGER,
-    "relation"	TEXT,
-    "MBTI" TEXT,
-    "hobby" TEXT NOT NULL,
-    "hair" INTEGER NOT NULL,
-    "eyes" INTEGER NOT NULL,
-    "mouth" INTEGER NOT NULL,
-    PRIMARY KEY("id" AUTOINCREMENT)
-  );
- */
-
-/*もし認証機能をつけるならUsersデータベース
- * user_id (PK) siriaiデータベースの(FK)
- * email nodemailerでメールを送れるようにしてみたい
- * password　ハッシュする
- */
-
 /* 
  *GET 
  *:3000/sirial/new
@@ -75,11 +54,11 @@ router.post('/new', function (req, res, next) {
     var errorplace = [];
     if (!data.name) errorplace.push("名前");
     if (!data.age) errorplace.push("年齢");
-    if (!data.age) errorplace.push("関係");
+    if (!data.relation) errorplace.push("関係");
     if (!data.hobby) errorplace.push("趣味");
     if (!data.MBTI) errorplace.push("MBTI");
 
-    data.errorMessage = `${errorplace.join(",")}` + "が未入力ですよ！！すべて入力してね。";
+    data.errorMessage = `${errorplace.join(",")}` + "の欄が未入力ですよ！！すべて入力してね。";
     return res.render("siriai/new", data)
   }
   res.render("siriai/mii", data);
@@ -148,7 +127,7 @@ router.post('/ai', function (req, res, next) {
     title: "AIアバター作成",
     name: req.body.name,
     age: req.body.age,
-    age: req.body.relation,
+    relation: req.body.relation,
     MBTI: req.body.MBTI,
     hobby: req.body.hobby,
   };
@@ -226,67 +205,3 @@ router.get('/favorite', function (req, res, next) {
 });
 
 module.exports = router;
-
-
-
-// 以下はメモ書き
-/**
- * const eye_parts_id = （何かしらでパーツIDを取ってこれる）
-if ( eye_parts_id == 1)
-  1パターン目の目の画像をinput
-画像を連番にしておくと、"eye_parts" + eye_parts_id + ".png"
-名刺を表示するエンドポイントでは、SELECT文等で、DBから持ってこれる
-getエンドポイント→どの友達の名刺を表示したいのかがわかる（ここで友達IDがわかる）
-友達IDをもとに、その友達自体のデータ（名前 / パーツごとのパーツID)
- */
-// /* GET 知り合い一覧をDBから取得して表示 */
-// router.get('/', function (req, res, next) {
-//   db.all('SELECT * FROM people', [], function (err, rows) {
-//     res.render('people/index', { title: '知り合い表示ページ', people: rows });
-//   });
-// });
-
-// /* POST 知り合いをDBに登録して一覧にリダイレクト */
-// router.post('/', function (req, res, next) {
-//   var 名前 = req.body['名前'];
-//   var 趣味 = req.body['趣味'];
-//   var 性格 = req.body['性格'];
-//   db.run('INSERT INTO people (名前, 趣味, 性格) VALUES (?, ?, ?)',
-//     [名前, 趣味, 性格],
-//     function (err) {
-//       console.log(err);
-//       res.redirect('/people');
-//     }
-//   );
-// });
-
-// /* POST 指定したidの知り合いをDBから削除して一覧にリダイレクト */
-// router.post('/:id/delete', function (req, res, next) {
-//   var id = req.params.id;
-//   db.run('DELETE FROM people WHERE id = ?', [id], function (err) {
-//     res.redirect('/people');
-//   });
-// });
-
-// /* GET 指定したidの知り合いの編集画面を表示 */
-// router.get('/:id/edit', function (req, res, next) {
-//   var id = req.params.id;
-//   db.get('SELECT * FROM people WHERE id = ?', [id], function (err, row) {
-//     res.render('people/edit', { person: row });
-//   });
-// });
-
-// /* POST 指定したidの知り合いの情報をDBで更新して一覧にリダイレクト */
-// router.post('/:id/update', function (req, res, next) {
-//   var id = req.params.id;
-//   var 名前 = req.body['名前'];
-//   var 趣味 = req.body['趣味'];
-//   var 性格 = req.body['性格'];
-//   db.run('UPDATE people SET 名前=?, 趣味=?, 性格=? WHERE id=?',
-//     [名前, 趣味, 性格, id],
-//     function (err) {
-//       console.log(err);
-//       res.redirect('/people');
-//     }
-//   );
-// });
