@@ -292,6 +292,7 @@ body {
   color: #d1d5db;
   transition: color 0.2s, transform 0.2s;
   line-height: 1;
+  -webkit-user-select: none;
   user-select: none;
 }
 
