@@ -1,49 +1,50 @@
-<!-- 登録ページ（名前・趣味・性格） -->
-
-<!-- 
-　このページに使われている変数
-    title
-    name
-    age
-    hobby
-    MBTI
--->
-
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <title>
+    <%= title %>
+  </title>
 </head>
 
-<body>
-    <h1>
-        <%= title %>
-    </h1>
+<body class="form-page">
+  <div class="form-container">
+    <h1><%= title %></h1>
 
-    <% if (errorMessage) {%>
-        <p style="color: red; font-weight: bold;">
-            <%= errorMessage %>
-        </p>
-        <% } %>
+    <% if (errorMessage) { %>
+      <div class="error-message"><%= errorMessage %></div>
+    <% } %>
 
+    <form action="/siriai/edit" method="post">
+      <input type="hidden" name="id" value="<%= id %>">
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input type="text" id="name" name="name" value="<%= name %>">
+      </div>
+      <div class="form-group">
+        <label for="age">年齢</label>
+        <input type="number" id="age" name="age" value="<%= age %>">
+      </div>
+      <div class="form-group">
+        <label for="relation">関係</label>
+        <input type="text" id="relation" name="relation" value="<%= relation %>">
+      </div>
+      <div class="form-group">
+        <label for="hobby">趣味</label>
+        <input type="text" id="hobby" name="hobby" value="<%= hobby %>">
+      </div>
+      <div class="form-group">
+        <label for="MBTI">性格 (MBTI)</label>
+        <input type="text" id="MBTI" name="MBTI" value="<%= MBTI %>">
+        <a class="link-small" href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a>
+      </div>
+      <button type="submit" class="btn-primary" id="update-button">更新する</button>
+    </form>
+    <a href="../" class="back-link-text">← 戻る</a>
+  </div>
+</body>
 
-            <!-- POSTで/siriai/newに通信する -->
-            <form action="/siriai/edit" method="post">
-                <!-- valueは最初に書かれてる文字 "の中に変数" -->
-                <input type="hidden" name="id" value="<%= id %>">
-                <h3>名前: <input type="text" name="name" value="<%= name %>"></h3>
-                <h3>年齢: <input type="number" name="age" value="<%= age %>"></h3>
-                <h3>関係: <input type="text" name="relation" value="<%= relation %>"></h3>
-                <h3>趣味: <input type="text" name="hobby" value="<%= hobby %>"></h3>
-                <h3>性格(MBTI): <input type="text" name="MBTI" value="<%= MBTI %>"> <a
-                        href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a></h3>
-                <button id="update-button">更新する</button>
-            </form>
-            <p>
-                <a href="../">戻る</a>
-            </p>
+</html>

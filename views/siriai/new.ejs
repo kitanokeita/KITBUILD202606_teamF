@@ -1,95 +1,67 @@
-<!-- 登録ページ（名前・趣味・性格） -->
-
-<!-- 
-　このページに使われている変数
-    title
-    name
-    age
-    hobby
-    MBTI
--->
-
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <title>
+    <%= title %>
+  </title>
 </head>
 
-<body>
-    <h1>
-        <%= title %>
-    </h1>
+<body class="form-page">
+  <div class="form-container">
+    <h1><%= title %></h1>
 
-    <% if (errorMessage) {%>
-        <p style= "color: red; font-weight: bold;"><%= errorMessage %></p>
+    <% if (errorMessage) { %>
+      <div class="error-message"><%= errorMessage %></div>
     <% } %>
 
-
-    <!-- POSTで/siriai/newに通信する -->
     <form action="/siriai/new" method="post">
-        <!-- valueは最初に書かれてる文字 "の中に変数" -->
-        <h3>名前: <input type="text" name="name" value="<%= name %>" placeholder="けいた"></h3>
-        <h3>年齢: <input type="number" name="age" value="<%= age %>" placeholder="20"></h3>
-        <h3>関係: <input type="text" name="relation" value="<%= relation %>" placeholder="友達"></h3>
-        <h3>趣味: <input type="text" name="hobby" value="<%= hobby %>" placeholder="サッカー"></h3>
-        <h3>性格(MBTI): 
-            <select name="MBTI">
-                <!-- サーバー側のMBTIの名前と一致する場合それを選択された状態にする -->
-                 <!-- 選択されたところのvalueが返される -->
-                <option value="" <%= MBTI === '' ? 'selected' : '' %>>選択してください</option>
-                <option value="INTJ" <%= MBTI === 'INTJ' ? 'selected' : '' %>>INTJ</option>
-                <option value="INTP" <%= MBTI === 'INTP' ? 'selected' : '' %>>INTP</option>
-                <option value="ENTJ" <%= MBTI === 'ENTJ' ? 'selected' : '' %>>ENTJ</option>
-                <option value="ENTP" <%= MBTI === 'ENTP' ? 'selected' : '' %>>ENTP</option>
-                <option value="INFJ" <%= MBTI === 'INFJ' ? 'selected' : '' %>>INFJ</option>
-                <option value="INFP" <%= MBTI === 'INFP' ? 'selected' : '' %>>INFP</option>
-                <option value="ENFJ" <%= MBTI === 'ENFJ' ? 'selected' : '' %>>ENFJ</option>
-                <option value="ENFP" <%= MBTI === 'ENFP' ? 'selected' : '' %>>ENFP</option>
-                <option value="ISTJ" <%= MBTI === 'ISTJ' ? 'selected' : '' %>>ISTJ</option>
-                <option value="ISFJ" <%= MBTI === 'ISFJ' ? 'selected' : '' %>>ISFJ</option>
-                <option value="ESTJ" <%= MBTI === 'ESTJ' ? 'selected' : '' %>>ESTJ</option>
-                <option value="ESFJ" <%= MBTI === 'ESFJ' ? 'selected' : '' %>>ESFJ</option>
-                <option value="ISTP" <%= MBTI === 'ISTP' ? 'selected' : '' %>>ISTP</option>
-                <option value="ISFP" <%= MBTI === 'ISFP' ? 'selected' : '' %>>ISFP</option>
-                <option value="ESTP" <%= MBTI === 'ESTP' ? 'selected' : '' %>>ESTP</option>
-                <option value="ESFP" <%= MBTI === 'ESFP' ? 'selected' : '' %>>ESFP</option>
-            </select>
-            <a href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a>
-        </h3>
-        <button id="next-button">Mii作成する</button>
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input type="text" id="name" name="name" value="<%= name %>" placeholder="けいた">
+      </div>
+      <div class="form-group">
+        <label for="age">年齢</label>
+        <input type="number" id="age" name="age" value="<%= age %>" placeholder="20">
+      </div>
+      <div class="form-group">
+        <label for="relation">関係</label>
+        <input type="text" id="relation" name="relation" value="<%= relation %>" placeholder="友達">
+      </div>
+      <div class="form-group">
+        <label for="hobby">趣味</label>
+        <input type="text" id="hobby" name="hobby" value="<%= hobby %>" placeholder="サッカー">
+      </div>
+      <div class="form-group">
+        <label for="MBTI">性格 (MBTI)</label>
+        <select id="MBTI" name="MBTI">
+          <option value="" <%= MBTI === '' ? 'selected' : '' %>>選択してください</option>
+          <option value="INTJ" <%= MBTI === 'INTJ' ? 'selected' : '' %>>INTJ</option>
+          <option value="INTP" <%= MBTI === 'INTP' ? 'selected' : '' %>>INTP</option>
+          <option value="ENTJ" <%= MBTI === 'ENTJ' ? 'selected' : '' %>>ENTJ</option>
+          <option value="ENTP" <%= MBTI === 'ENTP' ? 'selected' : '' %>>ENTP</option>
+          <option value="INFJ" <%= MBTI === 'INFJ' ? 'selected' : '' %>>INFJ</option>
+          <option value="INFP" <%= MBTI === 'INFP' ? 'selected' : '' %>>INFP</option>
+          <option value="ENFJ" <%= MBTI === 'ENFJ' ? 'selected' : '' %>>ENFJ</option>
+          <option value="ENFP" <%= MBTI === 'ENFP' ? 'selected' : '' %>>ENFP</option>
+          <option value="ISTJ" <%= MBTI === 'ISTJ' ? 'selected' : '' %>>ISTJ</option>
+          <option value="ISFJ" <%= MBTI === 'ISFJ' ? 'selected' : '' %>>ISFJ</option>
+          <option value="ESTJ" <%= MBTI === 'ESTJ' ? 'selected' : '' %>>ESTJ</option>
+          <option value="ESFJ" <%= MBTI === 'ESFJ' ? 'selected' : '' %>>ESFJ</option>
+          <option value="ISTP" <%= MBTI === 'ISTP' ? 'selected' : '' %>>ISTP</option>
+          <option value="ISFP" <%= MBTI === 'ISFP' ? 'selected' : '' %>>ISFP</option>
+          <option value="ESTP" <%= MBTI === 'ESTP' ? 'selected' : '' %>>ESTP</option>
+          <option value="ESFP" <%= MBTI === 'ESFP' ? 'selected' : '' %>>ESFP</option>
+        </select>
+        <a class="link-small" href="https://shindan.vercel.app/posts/hXdsqlvSWmnSZORICCqP">わからない人はこのリンクをクリック</a>
+      </div>
+      <button type="submit" class="btn-primary" id="next-button">Mii作成する</button>
     </form>
-    <p>
-        <a href="../">戻る</a>
-    </p>
-
-    <!-- script文
-     Mii作成するボタンを押した時
-    
-    <script>
-        document.getElementById('next-button').addEventListener('click', function () {
-            // フォームから値を取得
-            const userName = document.querySelector('input[name="name"]').value;
-            const age = document.querySelector('input[name="age"]').value;
-            const hobby = document.querySelector('input[name="hobby"]').value;
-            const MBTI = document.querySelector('input[name="MBTI"]').value;
-
-            sessionStorage.setItem('name', userName);
-            sessionStorage.setItem('age', age);
-            sessionStorage.setItem('hobby', hobby);
-            sessionStorage.setItem('MBTI', MBTI);
-
-            console.log("あいうえお");
-            console.log(age);
-            console.log(hobby);
-            console.log(MBTI);
-            window.location.href = '/siriai/new/mii';
-        })
-    </script>　-->
+    <a href="../" class="back-link-text">← 戻る</a>
+  </div>
 </body>
 
 </html>

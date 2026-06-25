@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>新規登録 - 知り合いコレクション</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規登録 - 知り合いコレクション</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body class="auth-page">
+  <div class="auth-card">
     <h1>新規ユーザー登録</h1>
-    
     <form action="/register" method="POST">
-      <div>
-        <label for="username">ユーザー名:</label>
-        <input type="text" id="username" name="username" required>
+      <div class="form-group">
+        <label for="username">ユーザー名</label>
+        <input type="text" id="username" name="username" required placeholder="ユーザー名を入力">
       </div>
-      <div>
-        <label for="password">パスワード:</label>
-        <input type="password" id="password" name="password" required>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" required placeholder="パスワードを入力">
       </div>
-      <div>
-        <button type="submit">登録する</button>
-      </div>
+      <button type="submit" class="btn-primary">登録する</button>
     </form>
-
-    <a href="/">トップページに戻る</a>
-  </body>
+    <div class="auth-links">
+      <a href="/">トップページに戻る</a>
+    </div>
+  </div>
+</body>
 </html>

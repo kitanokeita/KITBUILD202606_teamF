@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/avatar.css">
     <link rel="stylesheet" href="/stylesheets/mii.css">
-    <!-- <link rel="stylesheet" href="../../public/stylesheets/style.css"> -->
     <title>
         <%= title %>
     </title>
@@ -16,61 +15,59 @@
     <h1>
         <%= name %>さんの<%= title %>
     </h1>
-    <div class="showButton">
-        <input id="hair-button" type="button" value="髪型">
-        <input id="eyes-button" type="button" value="目">
-        <input id="mouth-button" type="button" value="口">
-    </div>
 
     <form action="/siriai/mii" method="post">
-
         <input type="hidden" name="name" value="<%= name %>">
         <input type="hidden" name="age" value="<%= age %>">
         <input type="hidden" name="relation" value="<%= relation %>">
         <input type="hidden" name="hobby" value="<%= hobby %>">
         <input type="hidden" name="MBTI" value="<%= MBTI %>">
-    
-        <%- include('parts')%>
-        <%- include('avatar', {
-            boxSize: 'size-mii',    // 枠のサイズ
-            imgIdPrefix: 'preview',   // IDの先頭につける文字
-            hair: 1,                  // 髪型の番号
-            eyes: 1,                  // 目の番号
-            mouth: 1                  // 口の番号
-            }) 
-        %>
 
-        <button type="submit">Mii完成</button>
-        <button type="submit" formaction="/siriai/ai">AIでアバターを作る</button>
+        <div class="mii-layout">
+            <div class="mii-left">
+                <div class="showButton">
+                    <input id="hair-button" type="button" value="髪型">
+                    <input id="eyes-button" type="button" value="目">
+                    <input id="mouth-button" type="button" value="口">
+                </div>
+                <%- include('parts')%>
+            </div>
 
-        
+            <div class="mii-right">
+                <%- include('avatar', {
+                    boxSize: 'size-mii',
+                    imgIdPrefix: 'preview',
+                    hair: 1,
+                    eyes: 1,
+                    mouth: 1
+                    })
+                %>
+                <div class="mii-actions">
+                    <button type="submit">Mii完成</button>
+                    <button type="submit" formaction="/siriai/ai">AIでアバターを作る</button>
+                </div>
+            </div>
+        </div>
     </form>
 
     <script>
-        // 引数にパーツ一覧のidが入り、それを表示させる関数
-        //showButtonとpartsとavatarの連携
-
-        //1
         function showParts(part) {
             document.getElementById('partsHair').style.display = 'none';
             document.getElementById('partsEyes').style.display = 'none';
             document.getElementById('partsMouth').style.display = 'none';
-            document.getElementById(part).style.display = 'block';
+            document.getElementById(part).style.display = 'flex';
         }
 
-        // hair-bottonを押したら、partsHair（髪型パーツ一覧）を表示する
         document.getElementById('hair-button').addEventListener('click', function () {
-            showParts('partsHair'); //1
+            showParts('partsHair');
         });
         document.getElementById('eyes-button').addEventListener('click', function () {
-            showParts('partsEyes'); //1
+            showParts('partsEyes');
         });
         document.getElementById('mouth-button').addEventListener('click', function () {
-            showParts('partsMouth'); //1
+            showParts('partsMouth');
         });
 
-
-        // 選択しているhairのradioの値が変わったときに発火。
         document.querySelectorAll('input[name="hair"]').forEach(function (radio) {
             radio.addEventListener('change', function () {
                 const img = document.getElementById('previewHair');
@@ -92,7 +89,6 @@
                 img.style.display = 'block';
             });
         });
-
     </script>
 </body>
 
