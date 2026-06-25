@@ -1,3 +1,5 @@
+//知り合い一覧ページ
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -12,67 +14,57 @@
 </head>
 
 <body>
-  <header class="page-header">
-    <div class="header-inner">
-      <h1 class="page-title"><%= title %></h1>
-      <a href="/" class="header-back">← 戻る</a>
-    </div>
-  </header>
-
-  <main class="main-content">
-    <% if (!rows || rows.length === 0) { %>
-      <div class="empty-state">
-        <p>まだ知り合いが登録されていません</p>
-        <a href="/siriai/new" class="btn-add">知り合いを追加する</a>
-      </div>
-    <% } else { %>
-      <div class="card-grid">
-        <% for(var i in rows) { %>
-          <% var obj = rows[i]; %>
-          <div class="business-card">
-            <div class="card-stripe"></div>
-            <div class="card-top">
-              <div class="card-avatar">
-                <%- include('avatar', { boxSize: 'size-itiran', imgIdPrefix: 'list' + obj.id, hair: obj.hair, eyes: obj.eyes, mouth: obj.mouth }) %>
-              </div>
-              <div class="card-identity">
-                <div class="card-name"><%= obj.name %></div>
-                <div class="card-badges">
-                  <span class="badge badge-relation"><%= obj.relation %></span>
-                  <span class="badge badge-age"><%= obj.age %>歳</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="card-detail">
-                <span class="detail-label">趣味</span>
-                <span class="detail-value"><%= obj.hobby %></span>
-              </div>
-              <div class="card-detail">
-                <span class="detail-label">MBTI</span>
-                <span class="detail-value">
-                  <% if (obj.MBTI) { %>
-                    <span class="mbti-badge"><%= obj.MBTI %></span>
-                  <% } else { %>
-                    —
-                  <% } %>
-                </span>
-              </div>
-            </div>
-            <div class="card-footer">
-              <div class="card-actions">
-                <a href="/siriai/edit?id=<%= obj.id %>" class="btn-edit">更新</a>
-                <a href="/siriai/delete?id=<%= obj.id %>" class="btn-delete">削除</a>
-              </div>
-              <a href="/siriai/favorite?id=<%= obj.id %>" class="btn-favorite<%= obj.favorite === 1 ? ' is-active' : '' %>">
-                <%= obj.favorite === 1 ? "★" : "☆" %>
+  <h1>
+    <%= title %>
+  </h1>
+  <div>
+    <table>
+      <tr>
+        <th>名前</th>
+        <th>年齢</th>
+        <th>関係</th>
+        <th>趣味</th>
+        <th>MBTI</th>
+        <th>アバター</th>
+        <!-- colspan="2"は二列分 -->
+        <th colspan="2">操作</th>
+        <th>お気に入り</th>
+      </tr>
+      <% for(var i in rows) { %>
+        <tr>
+          <% var obj=rows[i]; %>
+            <td>
+              <%= obj.name %>
+            </td>
+            <td>
+              <%= obj.age %>
+            </td>
+            <td>
+              <%= obj.relation %>
+            </td>
+            <td>
+              <%= obj.hobby %>
+            </td>
+            <td>
+              <%= obj.MBTI %>
+            </td>
+            <td>
+              <%- include('avatar', { boxSize: 'size-itiran' , imgIdPrefix: 'list' + obj.id, hair: obj.hair, eyes:
+                obj.eyes, mouth: obj.mouth }) %>
+            </td>
+            <td><a href="/siriai/edit?id=<%= obj.id %>">更新</a></td>
+            <td><a href="/siriai/delete?id=<%= obj.id %>">削除</a></td>
+            <td>
+              <a href="/siriai/favorite?id=<%= obj.id %>">
+                <%= obj.favorite===1 ? "★" : "☆" %>
               </a>
-            </div>
-          </div>
+            </td>
+        </tr>
         <% } %>
-      </div>
-    <% } %>
-  </main>
+    </table>
+  </div>
+  <!-- views/index.ejsから/に変えた -->
+  <a href="/">戻る</a>
 </body>
 
 </html>
