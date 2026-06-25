@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>ログイン - 知り合いコレクション</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - 知り合いコレクション</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body class="auth-page">
+  <div class="auth-card">
     <h1>ログイン</h1>
-    
     <form action="/login" method="POST">
-      <div>
-        <label for="username">ユーザー名:</label>
-        <!-- ユーザー名を入れる欄 -->
-        <input type="text" id="username" name="username" required>
+      <div class="form-group">
+        <label for="username">ユーザー名</label>
+        <input type="text" id="username" name="username" required placeholder="ユーザー名を入力">
       </div>
-      <div>
-        <label for="password">パスワード:</label>
-        <!-- パスワードを入れる欄 -->
-        <input type="password" id="password" name="password" required>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" required placeholder="パスワードを入力">
       </div>
-      <div>
-        <button type="submit">ログインする</button>
-      </div>
+      <button type="submit" class="btn-primary">ログインする</button>
     </form>
-
-    <p>まだアカウントをお持ちでないですか？ <a href="/register">新規登録はこちら</a></p>
-    <a href="/">トップページに戻る</a>
-  </body>
+    <div class="auth-links">
+      <p>まだアカウントをお持ちでないですか？ <a href="/register">新規登録はこちら</a></p>
+      <p><a href="/">トップページに戻る</a></p>
+    </div>
+  </div>
+</body>
 </html>
