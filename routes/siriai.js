@@ -99,9 +99,8 @@ router.get('/', function (req, res, next) {
  */
 //"INSERT INTO siriai (name , age , MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?)"
 router.post('/mii', function (req, res, next) {
-  const sql = "INSERT INTO siriai (user_id, name , age , relation, MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const sql = "INSERT INTO siriai (name , age , relation, MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   const data = [
-    req.user.id,
     req.body.name,
     req.body.age,
     req.body.relation,
