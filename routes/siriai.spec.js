@@ -31,6 +31,7 @@ function createApp() {
   app.use(express.json());
   app.use((req, res, next) => {
     res.render = (view, data) => res.json({ view, data });
+    req.user = { id: 1 };
     next();
   });
   app.use('/siriai', siriaiRouter);
