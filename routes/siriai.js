@@ -2,9 +2,30 @@ const { name } = require('ejs');
 var express = require('express');
 var router = express.Router();
 
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const { OpenAI } = require('openai');
+
+// 画像の一時保存先を設定
+const upload = multer({ dest: 'uploads/' });
+
+// Gemini APIをOpenAIライブラリ経由で初期化
+const openai = new OpenAI({
+  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+  apiKey: process.env.GEMINI_API_KEY
+});
+
 //DBの読み込み
 var sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('siriai.db');
+
+
+// 画像ファイルをData URLに変換する関数
+function getImageDataUrl(filePath, mimeType = 'image/png') {
+  const imageData = fs.readFileSync(filePath).toString("base64");
+  return `data:${mimeType};base64,${imageData}`;
+}
 
 /* 
  *GET 
@@ -69,8 +90,11 @@ router.post('/new', function (req, res, next) {
  * 
  */
 router.get('/itiran', function (req, res, next) {
+const userId = req.user.id;
+
   // favorite の降順にすることでお気に入り（1）が上に表示される
-  db.all('SELECT * FROM siriai ORDER BY favorite DESC', [], function (err, rows) {
+  //WHERE user_idを追加
+  db.all('SELECT * FROM siriai WHERE user_id = ? ORDER BY favorite DESC', [userId], function (err, rows) {
     if (err) {
       console.error(err);
       return res.status(500).send('データベースエラー');
@@ -101,7 +125,7 @@ router.get('/', function (req, res, next) {
 router.post('/mii', function (req, res, next) {
   const sql = "INSERT INTO siriai (user_id, name , age , relation, MBTI , hobby , hair , eyes , mouth) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const data = [
-    req.user.id,
+    req.user.id,//user.!!
     req.body.name,
     req.body.age,
     req.body.relation,
@@ -135,10 +159,104 @@ router.post('/ai', function (req, res, next) {
   res.render('siriai/ai', data);
 });
 
+
+
+/* POST AIによる画像解析 */
+///aiのpost通信が埋まっているため
+router.post('/analyze', upload.single('faceImage'), async function (req, res, next) {
+  try {
+    if (!req.file) {
+      return res.status(400).send('画像がアップロードされていません。');
+    }
+
+    // ユーザーがアップロードした顔写真の処理
+    const faceImagePath = req.file.path;
+    const faceDataUrl = getImageDataUrl(faceImagePath, req.file.mimetype);
+
+    // AIへ送るデータ配列の初期化
+    const contentArray = [
+      { 
+        type: "text", 
+        text: `まずは分析対象の顔写真です。この顔に最も似合う、または似ているパーツ（髪型、目、口）を、この後に提示する候補画像（それぞれ1〜5）の中から選んでください。
+               結果は必ず以下のJSON形式のみで出力してください。
+               {"hair": 1, "eyes": 1, "mouth": 1}` 
+      },
+      {
+        type: "image_url",
+        image_url: { url: faceDataUrl }
+      }
+    ];
+
+    // パーツ画像（hair1〜5, eyes1〜5, mouth1〜5）を読み込んで配列に追加
+    const parts = ['hair', 'eyes', 'mouth'];
+    const partsLabels = { hair: '髪型', eyes: '目', mouth: '口' };
+
+    for (const part of parts) {
+      contentArray.push({ type: "text", text: `ここからは${partsLabels[part]}の候補画像です。` });
+      
+      for (let i = 1; i <= 5; i++) {
+        // public/img フォルダのパスを指定
+        const partFilePath = path.join(__dirname, '../public/img', `${part}${i}.png`);
+        
+        // ファイルが存在するか確認してから追加
+        if (fs.existsSync(partFilePath)) {
+          const partDataUrl = getImageDataUrl(partFilePath);
+          contentArray.push({ type: "text", text: `${partsLabels[part]}の${i}番:` });
+          contentArray.push({
+            type: "image_url",
+            image_url: { url: partDataUrl }
+          });
+        }
+      }
+    }
+
+    // AI解析の実行
+    const response = await openai.chat.completions.create({
+      model: "gemini-3.1-flash-lite",
+      messages: [
+        {
+          role: "user",
+          content: contentArray
+        }
+      ],
+      response_format: { type: "json_object" }
+    });
+
+    // 一時ファイル(顔写真)を削除
+    fs.unlinkSync(faceImagePath);
+
+    const aiPrediction = JSON.parse(response.choices[0].message.content);
+
+    // Mii作成ページへデータを渡してレンダリング
+    res.render('siriai/mii', {
+      title: "Mii作成ページ",
+      name: req.body.name,
+      age: req.body.age,
+      relation: req.body.relation,
+      hobby: req.body.hobby,
+      MBTI: req.body.MBTI,
+      hair: aiPrediction.hair,
+      eyes: aiPrediction.eyes,
+      mouth: aiPrediction.mouth
+    });
+
+  } catch (error) {
+    console.error(error);
+    
+    // エラー時に一時ファイルが残っていたら削除
+    if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+    }
+    
+    res.status(500).send('AI解析中にエラーが発生しました。');
+  }
+});
+
 /* POST 指定したidの知り合いをDBから削除して一覧にリダイレクト */
 router.get('/delete', function (req, res, next) {
   var id = req.query.id;
-  db.run('DELETE FROM siriai WHERE id = ?', [id], function (err) {
+  var userId = req.user.id;
+  db.run('DELETE FROM siriai WHERE id = ? AND user_id = ?', [id , userId], function (err) {
     if (err) {
       console.error(err);
       return res.status(500).send('データベースエラー');
@@ -152,11 +270,16 @@ router.get('/delete', function (req, res, next) {
 //編集画面が必要
 //?はプレースホルダ
 router.get('/edit', function (req, res, next) {
-  var id = req.query.id; //URLの ?id= の部分を取得
-  db.get('SELECT * FROM siriai WHERE id = ?', [id], function (err, row) {
+  var id = req.query.id;
+  var userId = req.user.id;
+  
+  db.get('SELECT * FROM siriai WHERE id = ? AND user_id = ?', [id, userId], function (err, row) {
     if (err) {
       console.error(err);
       return res.status(500).send('データベースエラー');
+    }
+    if (!row) {
+      return res.status(404).send('データが見つからないか、権限がありません');
     }
     res.render('siriai/edit', {
       title: '知り合い更新',
@@ -173,8 +296,10 @@ router.get('/edit', function (req, res, next) {
 
 router.post('/edit', function (req, res, next) {
   var id = req.body.id;
-  db.run('UPDATE siriai SET name=?, age=?, relation=?, MBTI=?, hobby=? WHERE id=?',
-    [req.body.name, req.body.age, req.body.relation, req.body.MBTI, req.body.hobby, id],
+  var userId = req.user.id;
+  
+  db.run('UPDATE siriai SET name=?, age=?, relation=?, MBTI=?, hobby=? WHERE id=? AND user_id=?',
+    [req.body.name, req.body.age, req.body.relation, req.body.MBTI, req.body.hobby, id, userId],
     function (err) {
       if (err) {
         console.error(err);
@@ -190,16 +315,17 @@ router.post('/edit', function (req, res, next) {
  * 切り替え後は一覧ページにリダイレクト
  */
 router.get('/favorite', function (req, res, next) {
-  var id = req.query.id; // URLの ?id=
+  var id = req.query.id;
+  var userId = req.user.id;
 
-  // 今のfavoriteの値をDBから取得
-  db.get('SELECT favorite FROM siriai WHERE id = ?', [id], function (err, row) {
+  db.get('SELECT favorite FROM siriai WHERE id = ? AND user_id = ?', [id, userId], function (err, row) {
+    if (err || !row) {
+      return res.redirect('/siriai/itiran');
+    }
 
-    // 今が1なら0、今が0なら1に反転（トグル）
     var newFavorite = row.favorite === 1 ? 0 : 1;
 
-    // 反転した値でDBを更新
-    db.run('UPDATE siriai SET favorite = ? WHERE id = ?', [newFavorite, id], function (err) {
+    db.run('UPDATE siriai SET favorite = ? WHERE id = ? AND user_id = ?', [newFavorite, id, userId], function (err) {
       res.redirect('/siriai/itiran');
     });
   });
