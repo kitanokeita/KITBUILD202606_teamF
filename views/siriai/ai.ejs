@@ -1,23 +1,36 @@
 <!-- AIアバター診断ページ -->
-
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
 </head>
 
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    
+    <h1><%= title %></h1>
+    <p>顔写真をアップロードして、AIにアバターを作ってもらいましょう！</p>
+
+    <!-- 画像アップロード用のフォーム -->
+    <form action="/siriai/analyze" method="post" enctype="multipart/form-data">
+        <!-- mii.ejsへ引き継ぐための隠しデータ -->
+        <input type="hidden" name="name" value="<%= name %>">
+        <input type="hidden" name="age" value="<%= age %>">
+        <input type="hidden" name="relation" value="<%= relation %>">
+        <input type="hidden" name="hobby" value="<%= hobby %>">
+        <input type="hidden" name="MBTI" value="<%= MBTI %>">
+
+        <div>
+            <label for="faceImage">顔写真を選択:</label>
+            <input type="file" id="faceImage" name="faceImage" accept="image/*" required>
+        </div>
+        <br>
+        <button type="submit">AIでアバターを作る</button>
+    </form>
+
     <p>
-        <a href="../">戻る</a>
+        <a href="javascript:history.back()">戻る</a>
     </p>
 </body>
 

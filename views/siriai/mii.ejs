@@ -12,6 +12,12 @@
 </head>
 
 <body>
+    <% 
+        let currentHair = typeof hair !== 'undefined' ? hair : 1;
+        let currentEyes = typeof eyes !== 'undefined' ? eyes : 1;
+        let currentMouth = typeof mouth !== 'undefined' ? mouth : 1;
+    %>
+
     <h1>
         <%= name %>さんの<%= title %>
     </h1>
@@ -30,16 +36,16 @@
                     <input id="eyes-button" type="button" value="目">
                     <input id="mouth-button" type="button" value="口">
                 </div>
-                <%- include('parts')%>
+                <%- include('parts', { hair: currentHair, eyes: currentEyes, mouth: currentMouth })%>
             </div>
 
             <div class="mii-right">
                 <%- include('avatar', {
                     boxSize: 'size-mii',
                     imgIdPrefix: 'preview',
-                    hair: 1,
-                    eyes: 1,
-                    mouth: 1
+                    hair: currentHair,
+                    eyes: currentEyes,
+                    mouth: currentMouth
                     })
                 %>
                 <div class="mii-actions">
@@ -68,25 +74,58 @@
             showParts('partsMouth');
         });
 
+        // 画像のsrcを更新する共通関数
+        function updatePreview(partName, value) {
+            const imgId = 'preview' + partName.charAt(0).toUpperCase() + partName.slice(1);
+            const img = document.getElementById(imgId);
+            if (img) {
+                img.src = '/img/' + partName + value + '.png';
+                img.style.display = 'block';
+            }
+        }
+
         document.querySelectorAll('input[name="hair"]').forEach(function (radio) {
             radio.addEventListener('change', function () {
-                const img = document.getElementById('previewHair');
-                img.src = '/img/hair' + this.value + '.png';
-                img.style.display = 'block';
+                updatePreview('hair', this.value);
             });
         });
         document.querySelectorAll('input[name="eyes"]').forEach(function (radio) {
             radio.addEventListener('change', function () {
-                const img = document.getElementById('previewEyes');
-                img.src = '/img/eyes' + this.value + '.png';
-                img.style.display = 'block';
+                updatePreview('eyes', this.value);
             });
         });
         document.querySelectorAll('input[name="mouth"]').forEach(function (radio) {
             radio.addEventListener('change', function () {
-                const img = document.getElementById('previewMouth');
-                img.src = '/img/mouth' + this.value + '.png';
-                img.style.display = 'block';
+                updatePreview('mouth', this.value);
+            });
+        });
+
+        // ページが表示された時（戻るボタンでのキャッシュ復帰時も含む）に実行
+        window.addEventListener('pageshow', function(event) {
+            const parts = [
+                { name: 'hair', serverVal: '<%= currentHair %>' },
+                { name: 'eyes', serverVal: '<%= currentEyes %>' },
+                { name: 'mouth', serverVal: '<%= currentMouth %>' }
+            ];
+
+            parts.forEach(function(part) {
+                let targetValue;
+
+                // event.persisted が true の場合は、ブラウザの「戻る」ボタンなどで復帰した時
+                if (event.persisted) {
+                    const checkedRadio = document.querySelector('input[name="' + part.name + '"]:checked');
+                    targetValue = checkedRadio ? checkedRadio.value : part.serverVal;
+                } else {
+                    // AI解析直後など、通常の読み込み時は必ずサーバーから渡されたAIの推測値を使う
+                    targetValue = part.serverVal;
+                }
+
+                // 対象のラジオボタンを選択状態にして画像を更新する
+                const radioToSelect = document.querySelector('input[name="' + part.name + '"][value="' + targetValue + '"]');
+                if (radioToSelect) {
+                    radioToSelect.checked = true;
+                    updatePreview(part.name, targetValue);
+                }
             });
         });
     </script>

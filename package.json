@@ -16,6 +16,8 @@
     "express-session": "^1.19.0",
     "http-errors": "~1.6.3",
     "morgan": "^1.11.0",
+    "multer": "^2.2.0",
+    "openai": "^6.45.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sqlite3": "^6.0.1"
