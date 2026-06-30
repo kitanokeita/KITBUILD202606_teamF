@@ -173,7 +173,7 @@ router.get('/edit', function (req, res, next) {
 
 router.post('/edit', function (req, res, next) {
   var id = req.body.id;
-  db.run('UPDATE siriai SET name=?, age=?, MBTI=?, hobby=? WHERE id=?',
+  db.run('UPDATE siriai SET name=?, age=?, relation=?, MBTI=?, hobby=? WHERE id=?',
     [req.body.name, req.body.age, req.body.relation, req.body.MBTI, req.body.hobby, id],
     function (err) {
       if (err) {
